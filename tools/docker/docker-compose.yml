@@ -1,0 +1,19 @@
+version: '3'
+services:
+  aws-localstack:
+    image: localstack/localstack:latest
+    ports:
+      - 4566:4566
+    environment:
+      - DEBUG=1
+      - DEFAULT_REGION=us-west-2
+      - EDGE_PORT=4566
+    volumes:
+      - ${TEMPDIR:-/tmp/localstack}:/tmp/localstack
+      - "./scripts/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"  # ready hook
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - worker-network
+networks:
+  worker-network:
+    name: worker-network
